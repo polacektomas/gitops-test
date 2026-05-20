@@ -57,7 +57,7 @@ grafana:
       isDefault: false
 
   dashboards:
-    enabled: false
+    enabled: true
     list:
       # The official dashboard for the VictoriaMetrics Operator you installed earlier
       - name: vm-operator-dashboard
