@@ -19,7 +19,7 @@ spec:
         - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: quarkus-app-dev
+    namespace: victoria-test-app
   syncPolicy:
     automated:
       prune: true
