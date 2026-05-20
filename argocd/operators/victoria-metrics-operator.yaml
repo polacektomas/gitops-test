@@ -15,14 +15,8 @@ spec:
     targetRevision: 0.63.1
     helm:
       values: |
-        operator:
-          enable_converter_ownership: true
-        serviceMonitor:
-          enabled: false
         admissionWebhooks:
-          enabled: true
-          certManager:
-            enabled: true
+          policy: Ignore
   destination:
     server: https://kubernetes.default.svc
     namespace: victoria-metrics-operator
