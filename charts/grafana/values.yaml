@@ -42,14 +42,14 @@ grafana:
       access: proxy
       url: "http://vmsingle-vmsingle.victoria-metrics.svc.cluster.local:8429"
       isDefault: true
-#    - name: victoria-logs
-#      type: victoriametrics-logs-datasource
-#      access: proxy
-#      url: "http://vlsingle-vlsingle.victoria-metrics.svc.cluster.local:9428"
-#      isDefault: false
-#      plugins:
-#        - name: victoriametrics-logs-datasource
-#          version: latest
+    - name: victoria-logs
+      type: victoriametrics-logs-datasource
+      access: proxy
+      url: "http://vlsingle-vlsingle.victoria-metrics.svc.cluster.local:9428"
+      isDefault: false
+      plugins:
+        - name: victoriametrics-logs-datasource
+          version: latest
     - name: victoria-traces
       type: jaeger
       access: proxy
