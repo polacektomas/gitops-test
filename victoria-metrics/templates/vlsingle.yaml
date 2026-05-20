@@ -1,0 +1,39 @@
+{{- if .Values.victoriaLogs.vlsingle.enabled }}
+apiVersion: operator.victoriametrics.com/v1
+kind: VLSingle
+metadata:
+  name: {{ .Values.victoriaLogs.vlsingle.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vlsingle
+    app.kubernetes.io/instance: {{ .Values.victoriaLogs.vlsingle.name }}
+    app.kubernetes.io/component: log-database
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # Image
+  image:
+    repository: victoriametrics/victoria-logs
+    tag: v1.50.0
+    pullPolicy: Always
+
+  # Retention period for logs
+  retentionPeriod: {{ .Values.victoriaLogs.vlsingle.retentionPeriod }}
+
+  # Storage configuration
+  storage:
+    accessModes:
+      {{- toYaml .Values.victoriaLogs.vlsingle.storage.accessModes | nindent 6 }}
+    resources:
+      requests:
+        storage: {{ .Values.victoriaLogs.vlsingle.storage.size }}
+
+  # Resource limits and requests
+  resources:
+    {{- toYaml .Values.victoriaLogs.vlsingle.resources | nindent 4 }}
+
+  # Security context
+  securityContext:
+    {{- toYaml .Values.securityContext | nindent 4 }}
+{{- end }}

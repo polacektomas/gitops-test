@@ -1,0 +1,154 @@
+# Global settings
+namespace: victoria-metrics
+
+# Security context
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  runAsNonRoot: true
+
+# Labels to add to all resources
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  app.kubernetes.io/part-of: victoria-metrics
+
+
+# Victoria Metrics
+victoriaMetrics:
+  vmsingle:
+    enabled: true
+    name: vmsingle
+
+    # Retention period for metrics (1 month = 720 hours)
+    retentionPeriod: "30d"
+
+    # Storage configuration
+    storage:
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+
+    # Resource limits and requests
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 500m
+      limits:
+        memory: 1Gi
+        cpu: 1000m
+
+  vmagent:
+    enabled: true
+    name: vmagent
+
+    # Remote write configuration for metrics
+    remoteWrite:
+      - url: "http://vmsingle-vmsingle.victoria-metrics.svc.cluster.local:8428/api/v1/write"
+
+    # Scrape Interval
+    scrapeInterval: 30s
+
+    # Resource limits and requests
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 250m
+      limits:
+        memory: 500Mi
+        cpu: 500m
+
+  vmpodscrape:
+    enabled: true
+    name: main-pod-scraper
+
+    podMetricsEndpoints:
+      - scheme: http
+        relabelConfigs:
+          # Only scrape pods with prometheus.io/scrape = true
+          - sourceLabels: [ __meta_kubernetes_pod_annotation_prometheus_io_scrape ]
+            action: keep
+            regex: "true"
+          # Dynamically set the path from prometheus.io/path (defaults to /metrics)
+          - sourceLabels: [ __meta_kubernetes_pod_annotation_prometheus_io_path ]
+            action: replace
+            targetLabel: __metrics_path__
+            regex: (.+)
+          # Dynamically set the port from prometheus.io/port
+          - sourceLabels: [ __address__, __meta_kubernetes_pod_annotation_prometheus_io_port ]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            targetLabel: __address__
+
+  jfrogpodscrape:
+    enabled: false
+    name: jfrog-pod-scraper
+    namespaceSelector: artifactory-preprod
+    selector: artifactory
+
+# Victoria Logs
+victoriaLogs:
+  vlsingle:
+    enabled: true
+    name: vlsingle
+
+    # Retention period for logs (1 month = 720 hours)
+    retentionPeriod: "14d"
+
+    # Storage configuration
+    storage:
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+
+    # Resource limits and requests
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 500m
+      limits:
+        memory: 1Gi
+        cpu: 1000m
+
+  vlagent:
+    enabled: true
+    name: vlagent
+
+    # Remote write configuration for logs
+    remoteWrite:
+      - url: "http://vlsingle-vlsingle.victoria-metrics.svc.cluster.local:9428/internal/insert"
+
+    # Resource limits and requests
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 250m
+      limits:
+        memory: 500Mi
+        cpu: 500m
+
+
+# Victoria Traces
+victoriaTraces:
+  vtsingle:
+    enabled: true
+    name: vtsingle
+
+    # Retention period for traces (1 month = 720 hours)
+    retentionPeriod: "7d"
+
+    # Storage configuration
+    storage:
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+
+    # Resource limits and requests
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 500m
+      limits:
+        memory: 1Gi
+        cpu: 1000m

@@ -1,0 +1,39 @@
+{{- if .Values.victoriaTraces.vtsingle.enabled }}
+apiVersion: operator.victoriametrics.com/v1
+kind: VTSingle
+metadata:
+  name: {{ .Values.victoriaTraces.vtsingle.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vtsingle
+    app.kubernetes.io/instance: {{ .Values.victoriaTraces.vtsingle.name }}
+    app.kubernetes.io/component: traces-database
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # Image
+  image:
+    repository: victoriametrics/victoria-traces
+    tag: v0.8.2
+    pullPolicy: Always
+
+  # Retention period for traces
+  retentionPeriod: {{ .Values.victoriaTraces.vtsingle.retentionPeriod }}
+
+  # Storage configuration
+  storage:
+    accessModes:
+      {{- toYaml .Values.victoriaTraces.vtsingle.storage.accessModes | nindent 6 }}
+    resources:
+      requests:
+        storage: {{ .Values.victoriaTraces.vtsingle.storage.size }}
+
+  # Resource limits and requests
+  resources:
+    {{- toYaml .Values.victoriaTraces.vtsingle.resources | nindent 4 }}
+
+  # Security context
+  securityContext:
+    {{- toYaml .Values.securityContext | nindent 4 }}
+{{- end }}

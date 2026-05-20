@@ -1,0 +1,78 @@
+# Global settings
+namespace: grafana
+
+# Security context
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  runAsNonRoot: true
+
+# Labels to add to all resources
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  app.kubernetes.io/part-of: grafana
+
+# Grafana configuration
+grafana:
+  enabled: true
+  name: grafana
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  plugins:
+    - victoriametrics-logs-datasource
+
+  config:
+    log:
+      mode: "console"
+    # Security settings
+    security:
+      admin_user: admin
+      admin_password: admin
+      allow_embedding: false
+
+# Datasource configuration
+datasources:
+  - name: victoria-metrics
+    type: prometheus
+    access: proxy
+    url: "http://vmsingle-vmsingle.victoria-metrics.svc.cluster.local:8429"
+    isDefault: true
+  - name: victoria-logs
+    type: victoriametrics-logs-datasource
+    access: proxy
+    url: "http://vlsingle-vlsingle.victoria-metrics.svc.cluster.local:9428"
+    isDefault: false
+    editable: true
+  - name: victoria-traces
+    type: jaeger
+    access: proxy
+    url: "http://vtsingle-vtsingle.victoria-metrics.svc.cluster.local:10428/select/jaeger"
+    isDefault: false
+    editable: true
+
+dashboards:
+  enabled: true
+  list:
+    # The official dashboard for the VictoriaMetrics Operator you installed earlier
+    - name: vm-operator-dashboard
+      url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/master/dashboards/operator.json"
+    # The official dashboard for your VMSingle database
+    - name: vmsingle-dashboard
+      url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/master/dashboards/vmsingle.json"
+    # The official dashboard for VMAgent
+    - name: vm-agent-dashboard
+      url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/master/dashboards/vmagent.json"
+    # The official dashboard for VictoriaLogs
+    - name: victoria-logs-dashboard
+      url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/dashboards/victorialogs.json"
+    # The official dashboard for VictoriaTraces
+    - name: victoria-traces-dashboard
+      url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaTraces/master/dashboards/victoriatraces.json"

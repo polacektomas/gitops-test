@@ -1,0 +1,91 @@
+{{- if .Values.victoriaMetrics.vmpodscrape.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: {{ .Values.victoriaMetrics.vmpodscrape.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vmpodscrape
+    app.kubernetes.io/instance: {{ .Values.victoriaMetrics.vmpodscrape.name }}
+    app.kubernetes.io/component: metrics-pod-scrape
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  namespaceSelector:
+    any: true
+  selector: {}
+  podMetricsEndpoints:
+    {{- toYaml .Values.victoriaMetrics.vmpodscrape.podMetricsEndpoints | nindent 4}}
+{{- end }}
+---
+{{- if .Values.victoriaMetrics.jfrogpodscrape.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: jfrog-scraper
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vmpodscrape
+    app.kubernetes.io/instance: {{ .Values.victoriaMetrics.jfrogpodscrape.name }}
+    app.kubernetes.io/component: metrics-pod-scrape
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.victoriaMetrics.jfrogpodscrape.namespaceSelector }}
+  selector:
+    matchLabels:
+      app: {{ .Values.victoriaMetrics.jfrogpodscrape.selector }}
+  podMetricsEndpoints:
+    - scheme: http
+      path: "/artifactory/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/access/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/event/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/workers/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/topology/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/jfconnect/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/router/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+    - scheme: http
+      path: "/observability/api/v1/metrics"
+      portNumber: 8082
+      bearerTokenSecret:
+        name: jfrog-auth-secret-scoped
+        key: bearer-token
+{{- end }}

@@ -1,0 +1,39 @@
+{{- if .Values.victoriaMetrics.vmagent.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: {{ .Values.victoriaMetrics.vmagent.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vmagent
+    app.kubernetes.io/instance: {{ .Values.victoriaMetrics.vmagent.name }}
+    app.kubernetes.io/component: metrics-agent
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # Image
+  image:
+    repository: victoriametrics/vmagent
+    tag: v1.136.9
+    pullPolicy: Always
+
+  # Scrape Config
+  scrapeInterval: {{ .Values.victoriaMetrics.vmagent.scrapeInterval }}
+  podScrapeNamespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  podScrapeSelector: {}
+
+  # Remote write configuration for metrics
+  remoteWrite:
+    {{- toYaml .Values.victoriaMetrics.vmagent.remoteWrite | nindent 4 }}
+
+  # Resource limits and requests
+  resources:
+    {{- toYaml .Values.victoriaMetrics.vmagent.resources | nindent 4 }}
+
+  # Security context
+  securityContext:
+    {{- toYaml .Values.securityContext | nindent 4 }}
+{{- end }}

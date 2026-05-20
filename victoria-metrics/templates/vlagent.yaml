@@ -1,0 +1,36 @@
+{{- if .Values.victoriaLogs.vlagent.enabled }}
+apiVersion: operator.victoriametrics.com/v1
+kind: VLAgent
+metadata:
+  name: {{ .Values.victoriaLogs.vlagent.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vlagent
+    app.kubernetes.io/instance: {{ .Values.victoriaLogs.vlagent.name }}
+    app.kubernetes.io/component: log-agent
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # Image
+  image:
+    repository: victoriametrics/vlagent
+    tag: v1.50.0
+    pullPolicy: Always
+
+  # K8sCollector
+  k8sCollector:
+    enabled: true
+
+  # Remote write configuration for logs
+  remoteWrite:
+    {{- toYaml .Values.victoriaLogs.vlagent.remoteWrite | nindent 4 }}
+
+  # Resource limits and requests
+  resources:
+    {{- toYaml .Values.victoriaLogs.vlagent.resources | nindent 4 }}
+
+  # Security context
+  securityContext:
+    {{- toYaml .Values.securityContext | nindent 4 }}
+{{- end }}

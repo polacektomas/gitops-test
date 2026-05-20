@@ -1,0 +1,39 @@
+{{- if .Values.victoriaMetrics.vmsingle.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMSingle
+metadata:
+  name: {{ .Values.victoriaMetrics.vmsingle.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: vmsingle
+    app.kubernetes.io/instance: {{ .Values.victoriaMetrics.vmsingle.name }}
+    app.kubernetes.io/component: metrics-database
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # Image
+  image:
+    repository: victoriametrics/victoria-metrics
+    tag: v1.136.9
+    pullPolicy: Always
+
+  # Retention period for metrics
+  retentionPeriod: {{ .Values.victoriaMetrics.vmsingle.retentionPeriod }}
+
+  # Storage configuration
+  storage:
+    accessModes:
+      {{- toYaml .Values.victoriaMetrics.vmsingle.storage.accessModes | nindent 6 }}
+    resources:
+      requests:
+        storage: {{ .Values.victoriaMetrics.vmsingle.storage.size }}
+
+  # Resource limits and requests
+  resources:
+    {{- toYaml .Values.victoriaMetrics.vmsingle.resources | nindent 4 }}
+
+  # Security context
+  securityContext:
+    {{- toYaml .Values.securityContext | nindent 4 }}
+{{- end }}

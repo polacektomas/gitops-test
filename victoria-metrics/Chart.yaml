@@ -1,0 +1,5 @@
+apiVersion: v2
+name: victoria-metrics
+description: Victoria Metrics observability stack - Metrics, Logs, Traces
+type: application
+version: 0.1.0
