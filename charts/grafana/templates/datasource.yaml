@@ -15,7 +15,6 @@ spec:
   instanceSelector:
     matchLabels:
       app.kubernetes.io/instance: {{ $.Values.grafana.name }}
-  # Plugin installation
   {{- if .plugins }}
   plugins:
     {{- toYaml .plugins | nindent 4 }}
