@@ -33,7 +33,7 @@ grafana:
     security:
       admin_user: admin
       admin_password: admin
-      allow_embedding: false
+      allow_embedding: "false"
 
 # Datasource configuration
 datasources:
