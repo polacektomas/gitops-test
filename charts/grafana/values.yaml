@@ -26,9 +26,6 @@ grafana:
       cpu: 500m
       memory: 512Mi
 
-  plugins:
-    - victoriametrics-logs-datasource
-
   config:
     log:
       mode: "console"
@@ -51,6 +48,8 @@ datasources:
     url: "http://vlsingle-vlsingle.victoria-metrics.svc.cluster.local:9428"
     isDefault: false
     editable: true
+    plugins:
+      - victoriametrics-logs-datasource
   - name: victoria-traces
     type: jaeger
     access: proxy

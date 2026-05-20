@@ -11,12 +11,6 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  # Plugin installation
-  {{- if .Values.grafana.plugins }}
-  plugins:
-    {{- toYaml .Values.grafana.plugins | nindent 4 }}
-  {{- end }}
-
   # Grafana configuration
   config:
     {{- toYaml .Values.grafana.config | nindent 4 }}
