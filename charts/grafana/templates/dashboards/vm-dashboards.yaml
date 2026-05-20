@@ -1,4 +1,4 @@
-{{- if .Values.dashboards.enabled }}
+{{- if .Values.grafana.dashboards.enabled }}
 {{- range .Values.grafana.dashboards.list }}
 ---
 apiVersion: grafana.integreatly.org/v1beta1
