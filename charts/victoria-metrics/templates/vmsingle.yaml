@@ -15,7 +15,7 @@ spec:
   # Image
   image:
     repository: victoriametrics/victoria-metrics
-    tag: v1.136.9
+    tag: v1.143.0
     pullPolicy: Always
 
   # Retention period for metrics
