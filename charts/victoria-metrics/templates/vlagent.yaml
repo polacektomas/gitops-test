@@ -29,8 +29,4 @@ spec:
   # Resource limits and requests
   resources:
     {{- toYaml .Values.victoriaLogs.vlagent.resources | nindent 4 }}
-
-  # Security context
-  securityContext:
-    {{- toYaml .Values.securityContext | nindent 4 }}
 {{- end }}

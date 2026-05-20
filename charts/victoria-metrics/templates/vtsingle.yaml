@@ -32,8 +32,4 @@ spec:
   # Resource limits and requests
   resources:
     {{- toYaml .Values.victoriaTraces.vtsingle.resources | nindent 4 }}
-
-  # Security context
-  securityContext:
-    {{- toYaml .Values.securityContext | nindent 4 }}
 {{- end }}

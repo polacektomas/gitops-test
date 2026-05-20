@@ -37,7 +37,7 @@ grafana:
 
 # Datasource configuration
 datasources:
-  - name: VictoriaMetrics
+  - name: victoria-metrics
     type: prometheus
     access: proxy
     url: "http://vmsingle-vmsingle.victoria-metrics.svc.cluster.local:8429"

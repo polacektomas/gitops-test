@@ -4,6 +4,8 @@ kind: Grafana
 metadata:
   name: {{ .Values.grafana.name }}
   namespace: {{ .Values.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   labels:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: {{ .Values.grafana.name }}

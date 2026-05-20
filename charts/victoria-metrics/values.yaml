@@ -1,13 +1,6 @@
 # Global settings
 namespace: victoria-metrics
 
-# Security context
-securityContext:
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
-  runAsNonRoot: true
-
 # Labels to add to all resources
 commonLabels:
   app.kubernetes.io/managed-by: argocd

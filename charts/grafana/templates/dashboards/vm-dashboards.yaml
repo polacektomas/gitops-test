@@ -6,6 +6,8 @@ kind: GrafanaDashboard
 metadata:
   name: {{ .name }}
   namespace: {{ $.Values.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
   labels:
     app.kubernetes.io/name: grafana-dashboard
     app.kubernetes.io/instance: {{ .name }}
