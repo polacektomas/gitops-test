@@ -17,7 +17,7 @@ metadata:
 spec:
   instanceSelector:
     matchLabels:
-      app.kubernetes.io/instance: {{ $.Values.grafana.name }}
+      dashboards: "grafana"
   url: {{ .url }}
 {{- end }}
 {{- end }}

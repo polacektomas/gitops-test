@@ -59,7 +59,7 @@ grafana:
   dashboards:
     enabled: true
     list:
-      # The official dashboard for the VictoriaMetrics Operator you installed earlier
+      # The official dashboard for the VictoriaMetrics Operator
       - name: vm-operator-dashboard
         url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/master/dashboards/operator.json"
       # The official dashboard for your VMSingle database

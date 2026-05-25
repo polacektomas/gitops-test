@@ -8,8 +8,8 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Wait for ArgoCD to be ready
-`kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
-````
+kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
+```
 
 
 ### Access ArgoCD UI
