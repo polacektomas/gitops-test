@@ -1,28 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: victoria-metrics-operator
+  name: cert-manager
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-20"
+    argocd.argoproj.io/sync-wave: "-30"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://victoriametrics.github.io/helm-charts/
-    chart: victoria-metrics-operator
-    targetRevision: 0.63.1
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: v1.20.2
     helm:
       values: |
-        serviceMonitor:
-          enabled: false
-        admissionWebhooks:
-          certManager:
-            enabled: true
+        installCRDs: true
+        global:
+          leaderElection:
+            namespace: cert-manager
   destination:
     server: https://kubernetes.default.svc
-    namespace: victoria-metrics-operator
+    namespace: cert-manager
   syncPolicy:
     automated:
       prune: true
