@@ -10,12 +10,13 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.jetstack.io
+    repoURL: quay.io/jetstack/charts
     chart: cert-manager
     targetRevision: v1.20.2
     helm:
       values: |
-        installCRDs: true
+        crds:
+          enabled: true
         global:
           leaderElection:
             namespace: cert-manager
